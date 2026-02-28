@@ -40,7 +40,7 @@ CANCELED
 
 | 코드 | 설명 | 예시 |
 |------|------|------|
-| outboundOrderCode | 출고요청번호 (SOMS 채번) | "O-20241216-001" |
+| outboundOrderCode | 출고요청번호 (OMS 채번) | "O-20241216-001" |
 | clientOrderCode | 고객주문번호 (외부 시스템) | "C-12345" |
 | shipOrderKey | 출하문서번호 (WMS) | "SHK-001" |
 | invoiceNumber | 운송장번호 | "123456789012" |
@@ -49,11 +49,7 @@ CANCELED
 
 ## 주요 Enum (도메인 용어집 참조)
 
-### OrderType & TemperatureType
-
-- **OrderType**: 주문 유형 숫자 코드 ("210", "270") - DB/API 저장용
-- **TemperatureType**: 온도대 Enum (COLD, FROZEN, ROOM) - 비즈니스 로직/UI 표시용
-- 상세 매핑은 루트 `.claude/ai-context/domain-glossary.md` 참조
+> 상세 정의는 루트 `.claude/ai-context/domain-glossary.md` 참조
 
 ### DeliveryPolicy (배송 정책)
 
@@ -61,13 +57,13 @@ CANCELED
 |----|------|
 | DAWN | 새벽배송 (샛별) |
 | DAY | 일반배송 (낮배송) |
-| NOW | 컬리나우 (즉시배송) |
+| NOW | 즉시배송 |
 
 ### Courier (배송사)
 
 | 코드 | 설명 |
 |------|------|
-| KURLY | 컬리 자체배송 (샛별배송) |
+| 1PL | 자사 물류센터 배송 (새벽배송) |
 | CJDT | CJ대한통운 (일반배송) |
 | LTT | 롯데택배 (일반배송) |
 
@@ -77,7 +73,7 @@ CANCELED
 
 | 유형 | 설명 |
 |------|------|
-| 1P (First Party) | 컬리 물류센터에서 직접 처리 |
+| 1P (First Party) | 자사 물류센터에서 직접 처리 |
 | 3P (Third Party) | 외부 3PL 센터에서 처리 |
 
 ---
@@ -87,8 +83,6 @@ CANCELED
 | 시스템 | 약어 | 역할 |
 |--------|------|------|
 | WMS | Warehouse Management System | 창고 관리 (출고 지시/확인) |
-| TMS | Transportation Management System | 운송 관리 |
-| LIP | Logistics Information Platform | 상품 마스터 |
-| CMS | Commerce System | 커머스 주문 연동 |
+| CMS | Commerce Management System | 커머스 주문 연동 |
 
 > 상세 연동 정보는 `external-integration.md` 참조

@@ -9,8 +9,8 @@
 ```
               ┌──────────┐
    CMS ──────→│          │──────→ WMS (출고 지시)
- (주문접수)    │ oms-core │──────→ TMS (배송 요청)
-              │          │──────→ oms-plan (이벤트)
+ (주문접수)    │ oms-core │──────→ oms-plan (이벤트)
+              │          │
    WMS ──────→│          │
  (출하완료)    └──────────┘
 ```
@@ -19,7 +19,7 @@
 
 ## 인바운드 연동 (oms-core가 수신)
 
-### CMS (Commerce System)
+### CMS (Commerce Management System)
 
 | 항목 | 값 |
 |------|-----|
@@ -44,13 +44,6 @@
 | 연동 방식 | REST API 호출 (oms-core → WMS) |
 | 용도 | 출고 지시 요청 |
 
-### TMS (Transportation Management System)
-
-| 항목 | 값 |
-|------|-----|
-| 연동 방식 | REST API 호출 |
-| 용도 | 배송 요청, 운송장 발급 |
-
 ### oms-plan
 
 | 항목 | 값 |
@@ -58,12 +51,3 @@
 | 연동 방식 | Kafka 이벤트 발행 |
 | 용도 | 주문/출고 상태 변경 이벤트 전파 |
 | 토픽 | `kafka-spec.json` 참조 |
-
----
-
-## LIP (Logistics Information Platform)
-
-| 항목 | 값 |
-|------|-----|
-| 연동 방식 | REST API 호출 |
-| 용도 | 상품 마스터 정보 조회 (온도대, 센터별 주문유형 등) |
