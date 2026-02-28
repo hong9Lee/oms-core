@@ -1,0 +1,72 @@
+{
+  "_comment": "OMS-CORE API 명세 - 구현 진행 시 업데이트 필요",
+  "service": "oms-core",
+  "baseUrl": "http://localhost:8081",
+  "version": "0.0.1-SNAPSHOT",
+  "status": "PLANNED",
+  "endpoints": {
+    "order": {
+      "description": "주문 관리 API (계획)",
+      "apis": [
+        {
+          "method": "POST",
+          "path": "/api/v1/orders",
+          "description": "주문 생성",
+          "status": "PLANNED"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/orders/{orderId}",
+          "description": "주문 단건 조회",
+          "status": "PLANNED"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/orders",
+          "description": "주문 목록 조회",
+          "status": "PLANNED"
+        },
+        {
+          "method": "PUT",
+          "path": "/api/v1/orders/{orderId}/cancel",
+          "description": "주문 취소",
+          "status": "PLANNED"
+        }
+      ]
+    },
+    "outbound": {
+      "description": "출고 요청 API (계획)",
+      "apis": [
+        {
+          "method": "POST",
+          "path": "/api/v1/outbounds",
+          "description": "출고 요청 생성",
+          "status": "PLANNED"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/outbounds/{outboundOrderCode}",
+          "description": "출고 요청 조회",
+          "status": "PLANNED"
+        },
+        {
+          "method": "PUT",
+          "path": "/api/v1/outbounds/{outboundOrderCode}/status",
+          "description": "출고 상태 변경",
+          "status": "PLANNED"
+        }
+      ]
+    },
+    "health": {
+      "description": "헬스체크",
+      "apis": [
+        {
+          "method": "GET",
+          "path": "/server/properties",
+          "description": "서버 버전 정보",
+          "status": "PLANNED"
+        }
+      ]
+    }
+  }
+}
