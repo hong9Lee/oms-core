@@ -67,39 +67,14 @@ adapter.in.web → application.port.in → application.service → application.p
 
 ## 코딩 컨벤션
 
-### 웹 프레임워크 (Spring MVC)
+코드 컨벤션, 네이밍 규칙, 클래스 구조, 빌드 명령어 등 상세 개발 가이드는 **`/develop` 스킬**을 참조한다.
 
-- oms-core는 Spring MVC (Tomcat) 기반으로 동작한다
-- WebFlux/Reactive 사용하지 않음
-
-### 일반 규칙
-
-- 코드 작성 후 `./gradlew spotlessApply`로 포맷팅
-- 새 기능 추가 시 테스트 코드 작성 필수
-- Enum 사용 시 `domain-glossary.md` 정의를 따른다
-- DTO ↔ Entity 변환은 명시적 메서드로 (MapStruct 또는 정적 팩토리)
-
-### 네이밍 컨벤션
-
-| 대상 | 규칙 | 예시 |
-|------|------|------|
-| 클래스 | PascalCase | `OrderService`, `OutboundOrder` |
-| 메서드 | camelCase | `findByOrderCode()`, `createOutbound()` |
-| 상수 | UPPER_SNAKE | `MAX_RETRY_COUNT` |
-| 패키지 | lowercase | `co.oms.core.domain` |
-| DTO | 접미사 사용 | `OrderCreateRequest`, `OrderResponse` |
-
----
-
-## 개발 워크플로우
-
-```
-1. 코드 작성/수정
-2. ./gradlew spotlessApply   (포맷팅)
-3. ./gradlew test            (테스트)
-4. ./gradlew build           (빌드)
-5. PR 작성 (.claude/ai-context/pr-template.md 참조)
-```
+핵심 사항만 요약:
+- oms-core는 **Spring MVC (Tomcat)** 기반 (WebFlux 사용하지 않음)
+- DI: `@RequiredArgsConstructor` + `final` 필드
+- `@Getter` 사용 가능, `@Setter` 절대 사용 금지
+- Java `record`를 사용할 수 있는 곳이면 무조건 사용
+- 설정값은 `application.yml`에서 `@Value`로 주입 (하드코딩 금지)
 
 ---
 
