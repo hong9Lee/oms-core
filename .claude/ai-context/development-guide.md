@@ -67,14 +67,11 @@ adapter.in.web → application.port.in → application.service → application.p
 
 ## 코딩 컨벤션
 
-코드 컨벤션, 네이밍 규칙, 클래스 구조, 빌드 명령어 등 상세 개발 가이드는 **`/develop` 스킬**을 참조한다.
+공통 코드 컨벤션은 **루트 프로젝트의 `/develop` 스킬**에 정의되어 있다.
 
-핵심 사항만 요약:
-- oms-core는 **Spring MVC (Tomcat)** 기반 (WebFlux 사용하지 않음)
-- DI: `@RequiredArgsConstructor` + `final` 필드
-- `@Getter` 사용 가능, `@Setter` 절대 사용 금지
-- Java `record`를 사용할 수 있는 곳이면 무조건 사용
-- 설정값은 `application.yml`에서 `@Value`로 주입 (하드코딩 금지)
+### oms-core 오버라이드
+
+- **웹 프레임워크**: Spring MVC (Tomcat) 기반 — WebFlux 사용하지 않음
 
 ---
 
