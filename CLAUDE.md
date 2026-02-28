@@ -14,7 +14,7 @@ OMS 생태계의 **주문 엔진 (Single Source of Truth)** - 주문 생성부�
 | [kafka-spec.json](.claude/ai-context/kafka-spec.json) | Kafka 토픽 명세 (Producer 3개, Consumer 1개) |
 | [domain-overview.md](.claude/ai-context/domain-overview.md) | 서비스 역할, 주문 흐름, OutboundStatus, 주요 Enum |
 | [data-model.md](.claude/ai-context/data-model.md) | 도메인 모델 (Order, OrderItem, OutboundOrder, Shipment) |
-| [external-integration.md](.claude/ai-context/external-integration.md) | 외부 연동 (CMS, WMS, TMS, LIP, oms-plan) |
+| [external-integration.md](.claude/ai-context/external-integration.md) | 외부 연동 (CMS, WMS, oms-plan) |
 | [development-guide.md](.claude/ai-context/development-guide.md) | 개발 명령어, 패키지 구조, 코딩/테스트 컨벤션 |
 | [deploy-guide.md](.claude/ai-context/deploy-guide.md) | 배포 준비 6단계, 버전 규칙 |
 
