@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: oms-core
+  profiles:
+    active: local
+
+server:
+  port: 8081
