@@ -36,7 +36,7 @@ co.oms.core/
 │   └── out/                           # Outbound Adapter (도메인 → 외부)
 │       ├── persistence/               # DB Repository 구현체
 │       ├── kafka/                     # Kafka Producer
-│       └── client/                    # 외부 API 클라이언트 (WebClient)
+│       └── client/                    # 외부 API 클라이언트 (RestClient)
 ├── application/                       # Application 계층 (유스케이스 조합)
 │   ├── port/                          # Port 인터페이스
 │   │   ├── in/                        # Inbound Port (유스케이스 인터페이스)
@@ -67,25 +67,10 @@ adapter.in.web → application.port.in → application.service → application.p
 
 ## 코딩 컨벤션
 
-### Reactive 패턴 (WebFlux)
+### 웹 프레임워크 (Spring MVC)
 
-- `Mono`/`Flux`를 사용한 비동기 처리
-- **`.block()` 사용 금지** (테스트 코드 제외)
-- 에러 처리: `.onErrorResume()` 또는 `.onErrorMap()` 사용
-- 스트림 연산에서 부작용(side effect) 최소화
-
-```java
-// Good
-public Mono<Order> findOrder(String orderCode) {
-    return orderRepository.findByOrderCode(orderCode)
-        .switchIfEmpty(Mono.error(new OrderNotFoundException(orderCode)));
-}
-
-// Bad - block() 사용 금지
-public Order findOrder(String orderCode) {
-    return orderRepository.findByOrderCode(orderCode).block();
-}
-```
+- oms-core는 Spring MVC (Tomcat) 기반으로 동작한다
+- WebFlux/Reactive 사용하지 않음
 
 ### 일반 규칙
 
@@ -101,7 +86,7 @@ public Order findOrder(String orderCode) {
 | 클래스 | PascalCase | `OrderService`, `OutboundOrder` |
 | 메서드 | camelCase | `findByOrderCode()`, `createOutbound()` |
 | 상수 | UPPER_SNAKE | `MAX_RETRY_COUNT` |
-| 패키지 | lowercase | `co.oms.core.core.domain` |
+| 패키지 | lowercase | `co.oms.core.domain` |
 | DTO | 접미사 사용 | `OrderCreateRequest`, `OrderResponse` |
 
 ---
@@ -123,14 +108,14 @@ public Order findOrder(String orderCode) {
 ### 테스트 구조
 
 ```
-src/test/java/co/oms/omscore/
+src/test/java/co/oms/core/
 ├── domain/
 │   └── model/              # 단위 테스트 (엔티티, VO)
 ├── application/
 │   └── service/            # 유스케이스 테스트 (Port.out 모킹)
 └── adapter/
     ├── in/
-    │   └── web/            # API 통합 테스트 (WebTestClient)
+    │   └── web/            # API 통합 테스트 (MockMvc)
     └── out/
         ├── persistence/    # Repository 통합 테스트
         └── kafka/          # Kafka 통합 테스트
