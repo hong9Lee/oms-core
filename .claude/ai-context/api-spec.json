@@ -62,9 +62,15 @@
       "apis": [
         {
           "method": "GET",
+          "path": "/health",
+          "description": "서버 상태 확인 (status, service, timestamp)",
+          "status": "IMPLEMENTED"
+        },
+        {
+          "method": "GET",
           "path": "/server/properties",
-          "description": "서버 버전 정보",
-          "status": "PLANNED"
+          "description": "서버 버전 정보 (version, service)",
+          "status": "IMPLEMENTED"
         }
       ]
     }
