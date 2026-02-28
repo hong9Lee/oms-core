@@ -1,4 +1,4 @@
-package co.oms.omscore;
+package co.oms.core;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

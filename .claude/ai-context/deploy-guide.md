@@ -11,7 +11,7 @@
 | 항목 | 값 |
 |------|-----|
 | 서비스 경로 | `/Users/hglee/Desktop/oms/oms-core` |
-| 버전 파일 | `src/main/java/co/oms/omscore/common/ServerPropertiesController.java` |
+| 버전 파일 | `src/main/java/co/oms/core/common/ServerPropertiesController.java` |
 | Git 원격 저장소 | (설정 후 업데이트) |
 | 배포 포트 | 8081 |
 
@@ -19,7 +19,7 @@
 
 ```bash
 # 1. 현재 버전 확인
-cat oms-core/src/main/java/co/oms/omscore/common/ServerPropertiesController.java | grep "return"
+cat oms-core/src/main/java/co/oms/core/common/ServerPropertiesController.java | grep "return"
 
 # 2. 이전 태그 이후 변경 내용 확인
 cd oms-core
@@ -28,7 +28,7 @@ git log v{현재버전}..HEAD --oneline
 # 3. 버전 업데이트 (Edit 도구 사용)
 
 # 4. 커밋 & push
-git add src/main/java/co/oms/omscore/common/ServerPropertiesController.java
+git add src/main/java/co/oms/core/common/ServerPropertiesController.java
 git commit -m "v{새버전}"
 git push origin master
 

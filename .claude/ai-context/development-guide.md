@@ -28,7 +28,7 @@
 ### 패키지 구조
 
 ```
-co.oms.omscore/
+co.oms.core/
 ├── adapter/                           # Adapter 계층 (외부와의 접점)
 │   ├── in/                            # Inbound Adapter (외부 → 도메인)
 │   │   ├── web/                       # REST Controller + Request/Response DTO
@@ -101,7 +101,7 @@ public Order findOrder(String orderCode) {
 | 클래스 | PascalCase | `OrderService`, `OutboundOrder` |
 | 메서드 | camelCase | `findByOrderCode()`, `createOutbound()` |
 | 상수 | UPPER_SNAKE | `MAX_RETRY_COUNT` |
-| 패키지 | lowercase | `co.oms.omscore.core.domain` |
+| 패키지 | lowercase | `co.oms.core.core.domain` |
 | DTO | 접미사 사용 | `OrderCreateRequest`, `OrderResponse` |
 
 ---
