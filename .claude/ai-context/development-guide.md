@@ -14,29 +14,54 @@
 
 ---
 
-## 패키지 구조 컨벤션
+## 아키텍처: Hexagonal (Ports & Adapters)
+
+모든 OMS 서비스는 헥사고날 아키텍처를 따른다.
+
+### 핵심 원칙
+
+- **도메인은 외부를 모른다**: domain 패키지는 infra, adapter에 의존하지 않는다
+- **Port**: 도메인이 정의하는 인터페이스 (in: 유스케이스, out: 외부 연동)
+- **Adapter**: Port의 구현체 (in: Controller/Consumer, out: Repository/Client)
+- **의존성 방향**: adapter → application → domain (항상 안쪽으로)
+
+### 패키지 구조
 
 ```
 co.oms.omscore/
-├── api/                        # API 계층 (외부 노출)
-│   ├── controller/             # REST Controller
-│   └── dto/                    # Request/Response DTO
-├── core/                       # 핵심 도메인 계층
-│   ├── domain/                 # 엔티티, VO, Aggregate Root
-│   │   └── enums/              # Enum 정의
-│   ├── service/                # 비즈니스 로직
-│   └── repository/             # Repository 인터페이스
-├── infra/                      # 인프라 계층
-│   ├── kafka/                  # Kafka Producer/Consumer
-│   │   ├── producer/
-│   │   └── consumer/
-│   ├── client/                 # 외부 API 클라이언트 (WebClient)
-│   └── config/                 # 설정 클래스
-└── common/                     # 공통 유틸
-    ├── exception/              # 예외 정의
-    ├── response/               # 공통 응답 포맷
-    └── ServerPropertiesController.java
+├── adapter/                           # Adapter 계층 (외부와의 접점)
+│   ├── in/                            # Inbound Adapter (외부 → 도메인)
+│   │   ├── web/                       # REST Controller + Request/Response DTO
+│   │   └── kafka/                     # Kafka Consumer
+│   └── out/                           # Outbound Adapter (도메인 → 외부)
+│       ├── persistence/               # DB Repository 구현체
+│       ├── kafka/                     # Kafka Producer
+│       └── client/                    # 외부 API 클라이언트 (WebClient)
+├── application/                       # Application 계층 (유스케이스 조합)
+│   ├── port/                          # Port 인터페이스
+│   │   ├── in/                        # Inbound Port (유스케이스 인터페이스)
+│   │   └── out/                       # Outbound Port (외부 연동 인터페이스)
+│   └── service/                       # 유스케이스 구현 (Port.in 구현체)
+├── domain/                            # Domain 계층 (순수 비즈니스 로직)
+│   ├── model/                         # 엔티티, VO, Aggregate Root
+│   └── enums/                         # Enum 정의
+├── config/                            # 설정 클래스
+└── common/                            # 공통 유틸 (예외, 응답 포맷, 헬스체크)
 ```
+
+### 의존성 규칙
+
+```
+adapter.in.web → application.port.in → application.service → application.port.out
+                                                                      ↑
+                                                            adapter.out.persistence (구현)
+```
+
+| 패키지 | 의존 가능 | 의존 불가 |
+|--------|----------|----------|
+| domain | 없음 (순수) | application, adapter, infra |
+| application | domain | adapter |
+| adapter | application, domain | 다른 adapter |
 
 ---
 
@@ -99,13 +124,16 @@ public Order findOrder(String orderCode) {
 
 ```
 src/test/java/co/oms/omscore/
-├── core/
-│   ├── domain/          # 단위 테스트 (엔티티, VO)
-│   └── service/         # 서비스 테스트 (모킹)
-├── api/
-│   └── controller/      # API 통합 테스트 (WebTestClient)
-└── infra/
-    └── kafka/           # Kafka 통합 테스트
+├── domain/
+│   └── model/              # 단위 테스트 (엔티티, VO)
+├── application/
+│   └── service/            # 유스케이스 테스트 (Port.out 모킹)
+└── adapter/
+    ├── in/
+    │   └── web/            # API 통합 테스트 (WebTestClient)
+    └── out/
+        ├── persistence/    # Repository 통합 테스트
+        └── kafka/          # Kafka 통합 테스트
 ```
 
 ### 테스트 네이밍
