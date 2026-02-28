@@ -1,4 +1,4 @@
-package co.oms.omscore;
+package co.oms.core;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

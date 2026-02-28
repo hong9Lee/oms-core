@@ -1,4 +1,4 @@
-package co.oms.omscore.common;
+package co.oms.core.common;
 
 import java.time.LocalDateTime;
 import java.util.Map;
