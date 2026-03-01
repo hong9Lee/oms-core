@@ -65,7 +65,7 @@ Order (주문)                    ← IMPLEMENTED
 
 ## 주요 Enum
 
-> 상세 정의는 루트 `.claude/ai-context/domain-glossary.md` 참조
+> 상세 정의는 oms 프로젝트 `.claude/ai-context/domain-glossary.md` 참조
 
 | Enum | 값 |
 |------|-----|

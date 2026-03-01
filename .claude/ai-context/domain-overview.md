@@ -38,5 +38,5 @@ CANCELED
 
 ## 참조
 
-> 도메인 용어(코드 체계, DeliveryPolicy, Courier, 1P/3P 등)는 루트 `.claude/ai-context/domain-glossary.md` 참조
+> 도메인 용어(코드 체계, DeliveryPolicy, Courier, 1P/3P 등)는 oms 프로젝트 `.claude/ai-context/domain-glossary.md` 참조
 > 상세 연동 정보는 `external-integration.md` 참조
