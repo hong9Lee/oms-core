@@ -23,7 +23,11 @@ public class OrderKafkaConsumer {
             groupId = "${spring.kafka.consumer.group-id}",
             containerFactory = "orderKafkaListenerContainerFactory")
     public void consume(List<ConsumerRecord<String, OrderMessage>> records) {
-        log.info("주문 메시지 수신 - {}건", records.size());
+        log.info(
+                "주문 메시지 수신 - {}건, offset: {}-{}",
+                records.size(),
+                records.getFirst().offset(),
+                records.getLast().offset());
         List<SaveOrderCommand> commands = records.stream()
                                                  .map(ConsumerRecord::value)
                                                  .map(orderMessageMapper::toCommand)
