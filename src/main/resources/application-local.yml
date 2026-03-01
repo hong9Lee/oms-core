@@ -1,0 +1,17 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/oms-core
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: oms-core-order
+      auto-offset-reset: earliest
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JacksonJsonSerializer
+
+kafka:
+  topics:
+    order-1p: order.1p
+    order-3p: order.3p
