@@ -1,23 +1,20 @@
 # OMS-CORE 데이터 모델
 
-> 현재 oms-core는 초기화 단계입니다. 이 문서는 계획된 데이터 모델을 정의합니다.
-> 구현이 진행되면 실제 엔티티에 맞게 업데이트하세요.
-
 ---
 
-## 핵심 엔티티 관계도 (계획)
+## 핵심 엔티티 관계도
 
 ```
-Order (주문)
- ├── 1:N → OrderItem (주문 상품)
- ├── 1:N → OutboundOrder (출고 요청)
- │          └── 1:N → Shipment (배송)
- └── N:1 → Customer (고객)
+Order (주문)                    ← IMPLEMENTED
+ ├── 1:N → OrderItem (주문 상품) ← IMPLEMENTED (embedded)
+ ├── 1:N → OutboundOrder (출고 요청) ← PLANNED
+ │          └── 1:N → Shipment (배송)  ← PLANNED
+ └── N:1 → Customer (고객)             ← PLANNED
 ```
 
 ---
 
-## 엔티티 상세 (계획)
+## 구현 완료 엔티티
 
 ### Order (주문)
 
@@ -29,15 +26,19 @@ Order (주문)
 | deliveryPolicy | DeliveryPolicy | 배송 정책 (DAWN/DAY/NOW) |
 | orderDate | LocalDateTime | 주문일시 |
 | status | OrderStatus | 주문 상태 |
-| items | List\<OrderItem\> | 주문 상품 목록 (embedded) |
+| items | OrderItems (일급 객체) | 주문 상품 목록 (embedded) |
 
-### OrderItem (주문 상품)
+### OrderItem (주문 상품) — record
 
 | 필드 | 타입 | 설명 |
 |------|------|------|
 | goodsCode | String | 상품 코드 |
 | goodsName | String | 상품명 |
 | quantity | Integer | 수량 |
+
+---
+
+## 계획된 엔티티
 
 ### OutboundOrder (출고 요청)
 
@@ -64,35 +65,11 @@ Order (주문)
 
 ## 주요 Enum
 
-### OutboundStatus
+> 상세 정의는 루트 `.claude/ai-context/domain-glossary.md` 참조
 
-```java
-READY, PRODUCING, COMPLETED, CANCELED
-```
-
-### DeliveryPolicy
-
-```java
-DAWN, DAY, NOW
-```
-
-### OrderStatus
-
-```java
-RECEIVED, PROCESSING, COMPLETED, CANCELED
-```
-
-### Courier
-
-```java
-_1PL, CJDT, LTT
-```
-
----
-
-## 클러스터센터 코드
-
-| 코드 | 설명 |
-|------|------|
-| CC01 | 김포 물류센터 |
-| CC02 | 송파 물류센터 |
+| Enum | 값 |
+|------|-----|
+| OrderStatus | RECEIVED, PROCESSING, COMPLETED, CANCELED |
+| OutboundStatus | READY, PRODUCING, COMPLETED, CANCELED |
+| DeliveryPolicy | DAWN, DAY, NOW |
+| Courier | _1PL, CJDT, LTT |

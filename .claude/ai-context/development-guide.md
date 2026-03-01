@@ -1,6 +1,6 @@
 # OMS-CORE 개발 가이드
 
-> 공통 컨벤션(아키텍처, 코드 스타일, 빌드, 테스트 네이밍 등)은 **루트 `/develop` 스킬**에 정의되어 있다.
+> 공통 컨벤션(아키텍처, 코드 스타일, 빌드, 테스트 등)은 **루트 `/develop` 스킬**에 정의되어 있다.
 > 이 문서는 oms-core **고유 오버라이드**만 기술한다.
 
 ---
@@ -31,16 +31,4 @@
 
 ## oms-core 테스트 구조
 
-> 테스트 네이밍 컨벤션은 `/develop` 스킬의 TEST_CONVENTION을 따른다.
-
-```
-src/test/java/co/oms/core/
-├── domain/model/              # 단위 테스트 (엔티티, VO)
-├── application/service/       # 유스케이스 테스트 (Port.out 모킹)
-└── adapter/
-    ├── in/
-    │   ├── web/               # API 통합 테스트 (MockMvc)
-    │   └── kafka/             # Kafka Consumer 통합 테스트
-    └── out/
-        └── persistence/       # Repository 통합 테스트
-```
+> 테스트 컨벤션(네이밍, @Nested, Fixture, Fake 등)은 `/develop` 스킬의 TEST_CONVENTION 참조
