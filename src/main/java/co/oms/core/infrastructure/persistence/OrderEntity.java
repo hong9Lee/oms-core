@@ -1,4 +1,4 @@
-package co.oms.core.adapter.out.persistence;
+package co.oms.core.infrastructure.persistence;
 
 import java.time.LocalDateTime;
 import java.util.List;

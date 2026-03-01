@@ -5,6 +5,8 @@ import co.oms.core.domain.enums.OrderStatus;
 import co.oms.core.domain.model.Order;
 import co.oms.core.domain.model.OrderItem;
 import co.oms.core.domain.model.OrderItems;
+import co.oms.core.infrastructure.persistence.OrderEntity;
+import co.oms.core.infrastructure.persistence.OrderItemEntity;
 import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

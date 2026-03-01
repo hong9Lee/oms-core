@@ -3,7 +3,7 @@ package co.oms.core.adapter.in.kafka;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 
-import co.oms.core.adapter.out.persistence.OrderEntityRepository;
+import co.oms.core.infrastructure.persistence.OrderEntityRepository;
 import co.oms.core.application.port.in.OrderMessage;
 import co.oms.core.config.TestMongoConfig;
 import java.time.Duration;

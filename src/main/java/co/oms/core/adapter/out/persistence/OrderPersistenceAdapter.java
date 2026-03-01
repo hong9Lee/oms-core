@@ -1,25 +1,26 @@
 package co.oms.core.adapter.out.persistence;
 
-import co.oms.core.application.port.out.OrderRepository;
+import co.oms.core.application.port.out.OrderPersistencePort;
 import co.oms.core.domain.model.Order;
 import co.oms.core.domain.model.Orders;
+import co.oms.core.infrastructure.persistence.OrderEntityRepository;
 import java.util.Optional;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-/** OrderRepository 구현체 (MongoDB) */
+/** OrderPersistencePort 구현체 (MongoDB) */
 @Component
 @RequiredArgsConstructor
-public class OrderPersistenceAdapter implements OrderRepository {
+public class OrderPersistenceAdapter implements OrderPersistencePort {
 
     private final OrderEntityRepository orderEntityRepository;
     private final OrderPersistenceMapper orderPersistenceMapper;
 
     @Override
     public Order save(Order order) {
-        OrderEntity entity = orderPersistenceMapper.toEntity(order);
-        OrderEntity saved = orderEntityRepository.save(entity);
+        var entity = orderPersistenceMapper.toEntity(order);
+        var saved = orderEntityRepository.save(entity);
         return orderPersistenceMapper.toDomain(saved);
     }
 

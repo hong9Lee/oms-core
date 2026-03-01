@@ -1,4 +1,4 @@
-package co.oms.core.adapter.out.persistence;
+package co.oms.core.infrastructure.persistence;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
