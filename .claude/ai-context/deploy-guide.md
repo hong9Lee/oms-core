@@ -9,7 +9,7 @@
 
 | 항목 | 값 |
 |------|-----|
-| 서비스 경로 | `/Users/hglee/Desktop/oms/oms-core` |
+| 서비스 경로 | `{리포지토리루트}/oms-core` |
 | 버전 파일 | `src/main/java/co/oms/core/common/ServerPropertiesController.java` |
 | 배포 포트 | 8081 |
 | 기본 브랜치 | main |
