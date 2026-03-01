@@ -9,7 +9,9 @@ import java.util.stream.Collectors;
 public record Orders(List<Order> values) {
 
     public Orders {
-        values = (values != null) ? List.copyOf(values) : List.of();
+        if (values == null) {
+            values = List.of();
+        }
     }
 
     /** clientOrderCode 목록 추출 */
