@@ -65,11 +65,12 @@ Order (주문)                    ← IMPLEMENTED
 
 ## 주요 Enum
 
-> 상세 정의는 oms 프로젝트 `.claude/ai-context/domain-glossary.md` 참조
+> 각 Enum의 비즈니스 의미, 상태 전이, 배송 유형 매핑 등 상세 설명은
+> oms 프로젝트 `.claude/ai-context/domain-glossary.md` 참조
 
-| Enum | 값 |
-|------|-----|
-| OrderStatus | RECEIVED, PROCESSING, COMPLETED, CANCELED |
-| OutboundStatus | READY, PRODUCING, COMPLETED, CANCELED |
-| DeliveryPolicy | DAWN, DAY, NOW |
-| Courier | _1PL, CJDT, LTT |
+| Enum | 값 | glossary 섹션 |
+|------|-----|--------------|
+| OrderStatus | RECEIVED, PROCESSING, COMPLETED, CANCELED | OrderStatus (주문 상태) |
+| OutboundStatus | READY, PRODUCING, COMPLETED, CANCELED | OutboundStatus (출고 상태) |
+| DeliveryPolicy | DAWN, DAY, NOW | DeliveryPolicy (배송 정책) |
+| Courier | _1PL, CJDT, LTT | Courier (배송사) |
