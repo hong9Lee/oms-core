@@ -1,6 +1,6 @@
 # OMS-CORE 개발 가이드
 
-> 공통 컨벤션은 루트 스킬에 정의: `/develop`(빌드, 아키텍처, git), `/convention`(코드 스타일), `/test-guide`(테스트).
+> 공통 컨벤션은 oms 프로젝트 스킬에 정의: `/develop`(빌드, 아키텍처, git), `/convention`(코드 스타일), `/test-guide`(테스트).
 > 이 문서는 oms-core **고유 오버라이드**만 기술한다.
 
 ---
