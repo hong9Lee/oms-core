@@ -1,6 +1,6 @@
 package co.oms.core.adapter.in.kafka;
 
-import co.oms.core.application.port.in.OrderMessage;
+import co.oms.core.application.port.in.SaveOrderCommand;
 import co.oms.core.application.port.in.SaveOrderUseCase;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 public class OrderKafkaConsumer {
 
     private final SaveOrderUseCase saveOrderUseCase;
+    private final OrderMessageMapper orderMessageMapper;
 
     @KafkaListener(
             topics = {"${kafka.topics.order-1p}", "${kafka.topics.order-3p}"},
@@ -23,9 +24,10 @@ public class OrderKafkaConsumer {
             containerFactory = "orderKafkaListenerContainerFactory")
     public void consume(List<ConsumerRecord<String, OrderMessage>> records) {
         log.info("주문 메시지 수신 - {}건", records.size());
-        saveOrderUseCase.consumeAndSave(
-                records.stream()
-                       .map(ConsumerRecord::value)
-                       .toList());
+        List<SaveOrderCommand> commands = records.stream()
+                                                 .map(ConsumerRecord::value)
+                                                 .map(orderMessageMapper::toCommand)
+                                                 .toList();
+        saveOrderUseCase.saveOrders(commands);
     }
 }

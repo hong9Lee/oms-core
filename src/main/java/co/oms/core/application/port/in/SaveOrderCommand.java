@@ -3,16 +3,15 @@ package co.oms.core.application.port.in;
 import java.time.LocalDateTime;
 import java.util.List;
 
-/** Kafka 주문 메시지 DTO */
-public record OrderMessage(
+/** 주문 저장 커맨드 (인프라 독립) */
+public record SaveOrderCommand(
         String clientOrderCode,
         Long customerId,
         String deliveryPolicy,
         LocalDateTime orderDate,
-        List<OrderItemMessage> items) {
+        List<Item> items) {
 
-    /** 주문 상품 메시지 DTO */
-    public record OrderItemMessage(
+    public record Item(
             String goodsCode,
             String goodsName,
             Integer quantity) {}

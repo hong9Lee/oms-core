@@ -1,6 +1,6 @@
 package co.oms.core.application.service;
 
-import co.oms.core.application.port.in.OrderMessage;
+import co.oms.core.application.port.in.SaveOrderCommand;
 import co.oms.core.domain.enums.DeliveryPolicy;
 import co.oms.core.domain.enums.OrderStatus;
 import co.oms.core.domain.model.Order;
@@ -10,20 +10,20 @@ import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-/** OrderMessage → Order 도메인 변환 Mapper */
+/** SaveOrderCommand → Order 도메인 변환 Mapper */
 @Mapper(componentModel = "spring", imports = {OrderStatus.class, DeliveryPolicy.class})
-public interface OrderMessageMapper {
+public interface SaveOrderCommandMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "status", expression = "java(OrderStatus.RECEIVED)")
     @Mapping(target = "deliveryPolicy",
-            expression = "java(message.deliveryPolicy() != null ? DeliveryPolicy.valueOf(message.deliveryPolicy()) : null)")
-    Order toDomain(OrderMessage message);
+            expression = "java(command.deliveryPolicy() != null ? DeliveryPolicy.valueOf(command.deliveryPolicy()) : null)")
+    Order toDomain(SaveOrderCommand command);
 
-    OrderItem toItemDomain(OrderMessage.OrderItemMessage item);
+    OrderItem toItemDomain(SaveOrderCommand.Item item);
 
-    /** List<OrderItemMessage> → OrderItems */
-    default OrderItems toOrderItems(List<OrderMessage.OrderItemMessage> items) {
+    /** List<Item> → OrderItems */
+    default OrderItems toOrderItems(List<SaveOrderCommand.Item> items) {
         if (items == null) {
             return new OrderItems(List.of());
         }

@@ -1,6 +1,6 @@
 package co.oms.core.application.service;
 
-import co.oms.core.application.port.in.OrderMessage;
+import co.oms.core.application.port.in.SaveOrderCommand;
 import co.oms.core.application.port.in.SaveOrderUseCase;
 import co.oms.core.application.port.out.OrderPersistencePort;
 import co.oms.core.domain.model.Orders;
@@ -17,12 +17,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class SaveOrderService implements SaveOrderUseCase {
 
     private final OrderPersistencePort orderPersistencePort;
-    private final OrderMessageMapper orderMessageMapper;
+    private final SaveOrderCommandMapper saveOrderCommandMapper;
 
     @Override
     @Transactional
-    public void consumeAndSave(List<OrderMessage> messages) {
-        Orders orders = this.toDomainOrders(messages);
+    public void saveOrders(List<SaveOrderCommand> commands) {
+        Orders orders = this.toDomainOrders(commands);
         Orders newOrders = this.filterNewOrders(orders);
 
         if (newOrders.isEmpty()) {
@@ -33,11 +33,11 @@ public class SaveOrderService implements SaveOrderUseCase {
         this.logSaved(newOrders);
     }
 
-    /** 메시지 → 도메인 변환 */
-    private Orders toDomainOrders(List<OrderMessage> messages) {
+    /** 커맨드 → 도메인 변환 */
+    private Orders toDomainOrders(List<SaveOrderCommand> commands) {
         return new Orders(
-                messages.stream()
-                        .map(orderMessageMapper::toDomain)
+                commands.stream()
+                        .map(saveOrderCommandMapper::toDomain)
                         .toList());
     }
 
