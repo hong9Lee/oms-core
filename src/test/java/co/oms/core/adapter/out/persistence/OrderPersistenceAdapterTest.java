@@ -11,6 +11,8 @@ import co.oms.core.domain.model.OrderItems;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,52 +30,66 @@ class OrderPersistenceAdapterTest {
     @Autowired
     private OrderPersistenceAdapter adapter;
 
-    @Test
-    void 주문저장_정상저장후_조회가능() {
-        Order order = this.createOrder("C-TEST-001");
+    @Nested
+    @DisplayName("주문 저장 함수는")
+    class SaveTest {
 
-        Order saved = adapter.save(order);
+        @Test
+        @DisplayName("정상 저장 후 조회 가능하다")
+        void 정상저장후_조회가능() {
+            Order order = createOrder("C-TEST-001");
 
-        assertThat(saved.getId()).isNotNull();
-        assertThat(saved.getClientOrderCode()).isEqualTo("C-TEST-001");
-        assertThat(saved.getDeliveryPolicy()).isEqualTo(DeliveryPolicy.DAWN);
-        assertThat(saved.getStatus()).isEqualTo(OrderStatus.RECEIVED);
+            Order saved = adapter.save(order);
+
+            assertThat(saved.getId()).isNotNull();
+            assertThat(saved.getClientOrderCode()).isEqualTo("C-TEST-001");
+            assertThat(saved.getDeliveryPolicy()).isEqualTo(DeliveryPolicy.DAWN);
+            assertThat(saved.getStatus()).isEqualTo(OrderStatus.RECEIVED);
+        }
+
+        @Test
+        @DisplayName("주문 상품 포함 저장이 정상 동작한다")
+        void 주문상품포함_정상동작() {
+            OrderItem item = new OrderItem("G-001", "냉장우유", 2);
+            Order order = Order.builder()
+                               .clientOrderCode("C-TEST-003")
+                               .customerId(1L)
+                               .deliveryPolicy(DeliveryPolicy.DAWN)
+                               .orderDate(LocalDateTime.of(2026, 2, 28, 10, 0))
+                               .status(OrderStatus.RECEIVED)
+                               .items(new OrderItems(List.of(item)))
+                               .build();
+
+            Order saved = adapter.save(order);
+
+            assertThat(saved.getItems().values()).hasSize(1);
+            assertThat(saved.getItems().values().get(0).goodsCode()).isEqualTo("G-001");
+        }
     }
 
-    @Test
-    void 주문조회_clientOrderCode로_조회가능() {
-        Order order = this.createOrder("C-TEST-002");
-        adapter.save(order);
+    @Nested
+    @DisplayName("주문 조회 함수는")
+    class FindTest {
 
-        Optional<Order> found = adapter.findByClientOrderCode("C-TEST-002");
+        @Test
+        @DisplayName("clientOrderCode로 조회 가능하다")
+        void clientOrderCode로_조회가능() {
+            Order order = createOrder("C-TEST-002");
+            adapter.save(order);
 
-        assertThat(found).isPresent();
-        assertThat(found.get().getCustomerId()).isEqualTo(1L);
-    }
+            Optional<Order> found = adapter.findByClientOrderCode("C-TEST-002");
 
-    @Test
-    void 주문조회_존재하지않는코드면_빈값() {
-        Optional<Order> found = adapter.findByClientOrderCode("NOT-EXIST");
+            assertThat(found).isPresent();
+            assertThat(found.get().getCustomerId()).isEqualTo(1L);
+        }
 
-        assertThat(found).isEmpty();
-    }
+        @Test
+        @DisplayName("존재하지 않는 코드면 빈값을 반환한다")
+        void 존재하지않는코드면_빈값() {
+            Optional<Order> found = adapter.findByClientOrderCode("NOT-EXIST");
 
-    @Test
-    void 주문상품_포함저장_정상동작() {
-        OrderItem item = new OrderItem("G-001", "냉장우유", 2);
-        Order order = Order.builder()
-                           .clientOrderCode("C-TEST-003")
-                           .customerId(1L)
-                           .deliveryPolicy(DeliveryPolicy.DAWN)
-                           .orderDate(LocalDateTime.of(2026, 2, 28, 10, 0))
-                           .status(OrderStatus.RECEIVED)
-                           .items(new OrderItems(List.of(item)))
-                           .build();
-
-        Order saved = adapter.save(order);
-
-        assertThat(saved.getItems().values()).hasSize(1);
-        assertThat(saved.getItems().values().get(0).goodsCode()).isEqualTo("G-001");
+            assertThat(found).isEmpty();
+        }
     }
 
     private Order createOrder(String clientOrderCode) {
