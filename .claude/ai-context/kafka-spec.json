@@ -43,5 +43,18 @@
       }
     }
   ],
-  "producers": []
+  "producers": [
+    {
+      "name": "OrderTestProducer",
+      "topic": "order.1p",
+      "profile": "local",
+      "status": "IMPLEMENTED",
+      "description": "로컬 테스트용 주문 메시지 프로듀서 — @Scheduled(fixedRate=1000)로 1초마다 3건 발행",
+      "message": {
+        "class": "OrderMessage",
+        "keyType": "String (clientOrderCode)",
+        "clientOrderCodeFormat": "TEST-{yyyyMMddHHmmss}-{sequence}"
+      }
+    }
+  ]
 }

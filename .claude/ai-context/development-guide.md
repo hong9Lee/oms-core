@@ -47,6 +47,26 @@ ANNOTATIONS: [@Getter, @Builder, @Document("{collection}"), @NoArgsConstructor(P
 NOTE: @Document는 MongoDB Spring Data 어노테이션. 공통 컨벤션의 Entity 패턴에서 persistence 어노테이션 부분을 이 서비스에서는 @Document로 적용
 ```
 
+### 로컬 인프라 (Docker Compose)
+
+```dsl
+FILE: docker-compose.yml
+SERVICES:
+  mongodb: mongo:7.0 (Replica Set 모드, 트랜잭션 지원)
+  kafka: apache/kafka:3.9.0 (KRaft 모드)
+COMMANDS:
+  START: docker compose up -d
+  STOP: docker compose down
+  RESET: docker compose down -v
+```
+
+### 스케줄링
+
+```dsl
+ENABLED: @EnableScheduling (OmsCoreApplication)
+LOCAL_ONLY: 테스트 프로듀서 등 @Profile("local") 컴포넌트에서 사용
+```
+
 ---
 
 ## oms-core 테스트 구조

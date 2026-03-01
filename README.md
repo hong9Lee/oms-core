@@ -56,9 +56,27 @@ Root(oms) 프로젝트 하위에 clone되어 있으므로, 아래 기능이 자�
 
 ## 로컬 실행
 
+### 1. 인프라 기동 (MongoDB + Kafka)
+
 ```bash
-./gradlew bootRun              # http://localhost:8081
-./gradlew test                  # 전체 테스트
+docker compose up -d            # MongoDB(27017) + Kafka(9092) 기동
+docker compose ps               # 상태 확인
+docker compose down             # 종료
+docker compose down -v          # 종료 + 볼륨 삭제
+```
+
+### 2. 서버 실행
+
+```bash
+./gradlew bootRun              # http://localhost:8081 (profile: local)
+```
+
+서버 기동 시 `local` 프로파일이 활성화되며, 테스트 프로듀서가 1초마다 `order.1p` 토픽으로 3건의 주문 메시지를 자동 발행한다.
+
+### 3. 테스트 / 빌드
+
+```bash
+./gradlew test                  # 전체 테스트 (Embedded Kafka + MongoDB, Docker 불필요)
 ./gradlew spotlessApply         # 코드 포맷팅
 ./gradlew build                 # 빌드
 ```
