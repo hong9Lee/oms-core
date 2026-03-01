@@ -6,7 +6,9 @@ import java.util.List;
 public record OrderItems(List<OrderItem> values) {
 
     public OrderItems {
-        values = (values != null) ? List.copyOf(values) : List.of();
+        if (values == null) {
+            values = List.of();
+        }
     }
 
     public int count() {
