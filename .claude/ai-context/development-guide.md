@@ -23,12 +23,12 @@
 ### 트랜잭션 (MongoDB)
 
 ```dsl
+COMMON: /convention TRANSACTION 섹션 참조 (@Transactional 적용 규칙, 위치)
+
 RUNTIME:
   CONFIG: config/MongoConfig → MongoTransactionManager 빈 등록
   CONDITIONAL: @ConditionalOnMissingBean(PlatformTransactionManager.class) 적용
   REQUIRES: MongoDB Replica Set (standalone은 트랜잭션 미지원)
-  RULE: Service 계층의 다건 저장/변경에는 @Transactional 적용
-  ANNOTATION_LOCATION: Service의 @Override public 메서드
 
 TEST:
   RULE: Embedded MongoDB(Flapdoodle)는 Replica Set 미지원 → 트랜잭션 사용 불가
