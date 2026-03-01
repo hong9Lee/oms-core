@@ -2,6 +2,7 @@ package co.oms.core.domain.model;
 
 import co.oms.core.domain.enums.OrderStatus;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -9,6 +10,7 @@ import java.util.stream.Collectors;
 public record Orders(List<Order> values) {
 
     public Orders {
+        Objects.requireNonNull(values, "values must not be null");
         values = List.copyOf(values);
     }
 
