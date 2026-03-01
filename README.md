@@ -41,6 +41,19 @@ OMS의 **주문 엔진** — 주문 데이터의 Single Source of Truth (SSOT)
 
 ---
 
+## Root에서 자동 적용되는 기능
+
+oms-core는 Root(oms) 프로젝트 하위에 clone되어 있으므로, 아래 기능이 **자동으로 적용**된다.
+
+| 기능 | 설명 | 이 서비스에서의 효과 |
+|------|------|-------------------|
+| **Rules** | `adapter/in/web/` 작업 시 controller 컨벤션 자동 로드 등 | 6개 경로별 규칙이 해당 패키지 작업 시 자동 적용 |
+| **Hooks** | Java 파일 수정 후 Spotless 자동 포맷팅 | `./gradlew spotlessApply` 자동 실행 |
+| **code-reviewer** | 아키텍처·컨벤션 기준 코드 리뷰 | 헥사고날 의존성 방향, @Setter 금지 등 검증 |
+| **Auto Memory** | 세션 간 학습 유지 | MongoDB 트랜잭션 설정 등 반복 설명 불필요 |
+
+---
+
 ## 로컬 실행
 
 ```bash
