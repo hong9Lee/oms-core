@@ -1,14 +1,12 @@
 package co.oms.core.domain.model;
 
 import java.util.List;
-import java.util.Objects;
 
 /** 주문 상품 일급 컬렉션 */
 public record OrderItems(List<OrderItem> values) {
 
     public OrderItems {
-        Objects.requireNonNull(values, "values must not be null");
-        values = List.copyOf(values);
+        values = (values != null) ? List.copyOf(values) : List.of();
     }
 
     public int count() {
