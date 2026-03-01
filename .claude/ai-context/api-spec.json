@@ -28,58 +28,6 @@
           }
         }
       ]
-    },
-    "order": {
-      "description": "주문 관리 API (계획)",
-      "apis": [
-        {
-          "method": "POST",
-          "path": "/api/v1/orders",
-          "description": "주문 생성",
-          "status": "PLANNED"
-        },
-        {
-          "method": "GET",
-          "path": "/api/v1/orders/{orderId}",
-          "description": "주문 단건 조회",
-          "status": "PLANNED"
-        },
-        {
-          "method": "GET",
-          "path": "/api/v1/orders",
-          "description": "주문 목록 조회",
-          "status": "PLANNED"
-        },
-        {
-          "method": "PUT",
-          "path": "/api/v1/orders/{orderId}/cancel",
-          "description": "주문 취소",
-          "status": "PLANNED"
-        }
-      ]
-    },
-    "outbound": {
-      "description": "출고 요청 API (계획)",
-      "apis": [
-        {
-          "method": "POST",
-          "path": "/api/v1/outbounds",
-          "description": "출고 요청 생성",
-          "status": "PLANNED"
-        },
-        {
-          "method": "GET",
-          "path": "/api/v1/outbounds/{outboundOrderCode}",
-          "description": "출고 요청 조회",
-          "status": "PLANNED"
-        },
-        {
-          "method": "PUT",
-          "path": "/api/v1/outbounds/{outboundOrderCode}/status",
-          "description": "출고 상태 변경",
-          "status": "PLANNED"
-        }
-      ]
     }
   }
 }
