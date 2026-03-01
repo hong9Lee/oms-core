@@ -41,6 +41,19 @@ OMS의 **주문 엔진** — 주문 데이터의 Single Source of Truth (SSOT)
 
 ---
 
+## Root에서 자동 적용되는 기능
+
+Root(oms) 프로젝트 하위에 clone되어 있으므로, 아래 기능이 자동 적용된다. 상세는 [Root README](https://github.com/hong9Lee/oms) 참조.
+
+| 기능 | 이 서비스에서의 효과 |
+|------|-------------------|
+| **Rules** | `adapter/in/web/` 등 경로 작업 시 해당 스킬 섹션 자동 참조 |
+| **Hooks** | Java 파일 수정 후 Spotless 자동 포맷팅, main 직접 커밋 차단 |
+| **code-reviewer** | 헥사고날 아키텍처 · 컨벤션 기준 코드 리뷰 (sonnet, 수정 불가) |
+| **Auto Memory** | 세션 간 학습 유지 (MongoDB 트랜잭션 설정 등 반복 설명 불필요) |
+
+---
+
 ## 로컬 실행
 
 ```bash
