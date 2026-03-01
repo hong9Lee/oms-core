@@ -1,0 +1,47 @@
+{
+  "service": "oms-core",
+  "version": "0.0.1-SNAPSHOT",
+  "consumers": [
+    {
+      "name": "OrderKafkaConsumer",
+      "topics": ["order.1p", "order.3p"],
+      "groupId": "oms-core-order",
+      "containerFactory": "orderKafkaListenerContainerFactory",
+      "batchListener": true,
+      "status": "IMPLEMENTED",
+      "description": "1P/3P 주문 메시지를 배치 수신하여 MongoDB에 저장",
+      "message": {
+        "class": "OrderMessage",
+        "package": "adapter.in.kafka",
+        "keyType": "String (clientOrderCode)",
+        "fields": {
+          "clientOrderCode": "String - 고객 주문 코드 (unique)",
+          "customerId": "Long - 고객 ID",
+          "deliveryPolicy": "String - 배송 정책 (DAWN | DAY | NOW)",
+          "orderDate": "LocalDateTime - 주문 일시",
+          "items": "List<OrderItemMessage> - 주문 상품 목록"
+        },
+        "itemFields": {
+          "goodsCode": "String - 상품 코드",
+          "goodsName": "String - 상품명",
+          "quantity": "Integer - 수량"
+        }
+      },
+      "flow": "OrderMessage → SaveOrderCommand(port.in) → SaveOrderService → MongoDB",
+      "deduplication": "clientOrderCode 기준 중복 필터링 (기존 주문 일괄 조회 후 신규만 저장)",
+      "errorHandling": {
+        "retryCount": 3,
+        "backoffMs": 1000,
+        "notRetryable": ["IllegalArgumentException"]
+      },
+      "config": {
+        "maxPollRecords": 100,
+        "fetchMinBytes": 1,
+        "fetchMaxWaitMs": 500,
+        "autoOffsetReset": "earliest",
+        "deserializer": "JacksonJsonDeserializer"
+      }
+    }
+  ],
+  "producers": []
+}
