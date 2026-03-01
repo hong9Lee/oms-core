@@ -1,6 +1,6 @@
 package co.oms.core.config;
 
-import co.oms.core.application.port.in.OrderMessage;
+import co.oms.core.adapter.in.kafka.OrderMessage;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
@@ -47,7 +47,7 @@ public class KafkaConsumerConfig {
         props.put(ConsumerConfig.FETCH_MAX_WAIT_MS_CONFIG, 500);
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JacksonJsonDeserializer.class);
-        props.put(JacksonJsonDeserializer.TRUSTED_PACKAGES, "co.oms.core.application.port.in");
+        props.put(JacksonJsonDeserializer.TRUSTED_PACKAGES, "co.oms.core.adapter.in.kafka");
         props.put(JacksonJsonDeserializer.VALUE_DEFAULT_TYPE, OrderMessage.class.getName());
 
         return new DefaultKafkaConsumerFactory<>(props);
