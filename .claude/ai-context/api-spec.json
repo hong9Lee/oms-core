@@ -1,10 +1,34 @@
 {
-  "_comment": "OMS-CORE API 명세 - 구현 진행 시 업데이트 필요",
   "service": "oms-core",
   "baseUrl": "http://localhost:8081",
   "version": "0.0.1-SNAPSHOT",
-  "status": "PLANNED",
   "endpoints": {
+    "health": {
+      "description": "헬스체크",
+      "apis": [
+        {
+          "method": "GET",
+          "path": "/health",
+          "description": "서버 상태 확인",
+          "status": "IMPLEMENTED",
+          "response": {
+            "status": "String (UP)",
+            "service": "String (oms-core)",
+            "timestamp": "String (ISO DateTime)"
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/server/properties",
+          "description": "서버 버전 정보",
+          "status": "IMPLEMENTED",
+          "response": {
+            "version": "String (0.0.1)",
+            "service": "String (oms-core)"
+          }
+        }
+      ]
+    },
     "order": {
       "description": "주문 관리 API (계획)",
       "apis": [
@@ -54,23 +78,6 @@
           "path": "/api/v1/outbounds/{outboundOrderCode}/status",
           "description": "출고 상태 변경",
           "status": "PLANNED"
-        }
-      ]
-    },
-    "health": {
-      "description": "헬스체크",
-      "apis": [
-        {
-          "method": "GET",
-          "path": "/health",
-          "description": "서버 상태 확인 (status, service, timestamp)",
-          "status": "IMPLEMENTED"
-        },
-        {
-          "method": "GET",
-          "path": "/server/properties",
-          "description": "서버 버전 정보 (version, service)",
-          "status": "IMPLEMENTED"
         }
       ]
     }
