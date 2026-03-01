@@ -5,7 +5,6 @@ import co.oms.core.application.port.in.SaveOrderUseCase;
 import co.oms.core.application.port.out.OrderPersistencePort;
 import co.oms.core.domain.model.Orders;
 import java.util.List;
-import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,28 +22,42 @@ public class SaveOrderService implements SaveOrderUseCase {
     @Override
     @Transactional
     public void consumeAndSave(List<OrderMessage> messages) {
-        // 1. 메시지를 도메인 객체로 변환
-        Orders orders = new Orders(
+        Orders orders = this.toDomainOrders(messages);
+        Orders newOrders = this.filterNewOrders(orders);
+
+        if (newOrders.isEmpty()) {
+            return;
+        }
+
+        orderPersistencePort.saveAll(newOrders);
+        this.logSaved(newOrders);
+    }
+
+    /** 메시지 → 도메인 변환 */
+    private Orders toDomainOrders(List<OrderMessage> messages) {
+        return new Orders(
                 messages.stream()
                         .map(orderMessageMapper::toDomain)
                         .toList());
+    }
 
-        // 2. 기존 주문 일괄 조회로 중복 확인
-        Set<String> requestedCodes = orders.extractClientOrderCodes();
-        Orders existingOrders = orderPersistencePort.findByClientOrderCodeIn(requestedCodes);
-        Set<String> existingCodes = existingOrders.extractClientOrderCodes();
+    /** 기존 주문 제외한 신규 주문만 필터링 */
+    private Orders filterNewOrders(Orders orders) {
+        Orders existingOrders = orderPersistencePort.findByClientOrderCodeIn(
+                orders.extractClientOrderCodes());
+        this.logDuplicates(existingOrders);
+        return orders.excludeExisting(existingOrders);
+    }
 
-        // 3. 중복 주문 로깅
-        existingCodes.forEach(code ->
-                log.warn("주문 중복 수신 - clientOrderCode: {}", code));
+    /** 중복 주문 로깅 */
+    private void logDuplicates(Orders duplicates) {
+        duplicates.values().forEach(order ->
+                log.warn("주문 중복 수신 - clientOrderCode: {}", order.getClientOrderCode()));
+    }
 
-        // 4. 신규 주문만 일괄 저장
-        Orders newOrders = orders.excludeByClientOrderCodes(existingCodes);
-        if (!newOrders.isEmpty()) {
-            orderPersistencePort.saveAll(newOrders);
-            newOrders.values().forEach(order ->
-                    log.info("주문 저장 완료 - clientOrderCode: {}",
-                            order.getClientOrderCode()));
-        }
+    /** 저장 완료 로깅 */
+    private void logSaved(Orders saved) {
+        saved.values().forEach(order ->
+                log.info("주문 저장 완료 - clientOrderCode: {}", order.getClientOrderCode()));
     }
 }

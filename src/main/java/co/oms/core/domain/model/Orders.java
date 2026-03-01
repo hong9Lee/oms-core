@@ -19,11 +19,12 @@ public record Orders(List<Order> values) {
                      .collect(Collectors.toUnmodifiableSet());
     }
 
-    /** 주어진 clientOrderCode에 해당하는 주문을 제외 */
-    public Orders excludeByClientOrderCodes(Set<String> excludeCodes) {
+    /** 기존 주문에 포함된 주문을 제외 */
+    public Orders excludeExisting(Orders existing) {
+        Set<String> existingCodes = existing.extractClientOrderCodes();
         return new Orders(
                 values.stream()
-                      .filter(order -> !excludeCodes.contains(order.getClientOrderCode()))
+                      .filter(order -> !existingCodes.contains(order.getClientOrderCode()))
                       .toList());
     }
 
