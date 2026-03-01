@@ -7,7 +7,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import co.oms.core.application.port.in.OrderMessage;
-import co.oms.core.application.port.out.OrderRepository;
+import co.oms.core.application.port.out.OrderPersistencePort;
 import co.oms.core.domain.model.Order;
 import co.oms.core.domain.model.OrderItems;
 import co.oms.core.domain.model.Orders;
@@ -23,31 +23,31 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class OrderServiceTest {
+class SaveOrderServiceTest {
 
     @Mock
-    private OrderRepository orderRepository;
+    private OrderPersistencePort orderPersistencePort;
 
     @Spy
     private OrderMessageMapper orderMessageMapper = Mappers.getMapper(OrderMessageMapper.class);
 
     @InjectMocks
-    private OrderService orderService;
+    private SaveOrderService saveOrderService;
 
     @Test
     void 주문저장_정상요청이면_일괄저장된다() {
         // given
         OrderMessage message = this.createMessage("C-12345");
-        given(orderRepository.findByClientOrderCodeIn(Set.of("C-12345")))
+        given(orderPersistencePort.findByClientOrderCodeIn(Set.of("C-12345")))
                 .willReturn(new Orders(List.of()));
-        given(orderRepository.saveAll(any(Orders.class)))
+        given(orderPersistencePort.saveAll(any(Orders.class)))
                 .willAnswer(inv -> inv.getArgument(0));
 
         // when
-        orderService.consumeAndSave(List.of(message));
+        saveOrderService.consumeAndSave(List.of(message));
 
         // then
-        verify(orderRepository, times(1)).saveAll(any(Orders.class));
+        verify(orderPersistencePort, times(1)).saveAll(any(Orders.class));
     }
 
     @Test
@@ -61,14 +61,14 @@ class OrderServiceTest {
                               .orderDate(LocalDateTime.of(2026, 2, 28, 10, 0))
                               .items(new OrderItems(List.of()))
                               .build();
-        given(orderRepository.findByClientOrderCodeIn(Set.of("C-12345")))
+        given(orderPersistencePort.findByClientOrderCodeIn(Set.of("C-12345")))
                 .willReturn(new Orders(List.of(existing)));
 
         // when
-        orderService.consumeAndSave(List.of(message));
+        saveOrderService.consumeAndSave(List.of(message));
 
         // then
-        verify(orderRepository, never()).saveAll(any(Orders.class));
+        verify(orderPersistencePort, never()).saveAll(any(Orders.class));
     }
 
     @Test
@@ -76,16 +76,16 @@ class OrderServiceTest {
         // given
         OrderMessage message1 = this.createMessage("C-001");
         OrderMessage message2 = this.createMessage("C-002");
-        given(orderRepository.findByClientOrderCodeIn(Set.of("C-001", "C-002")))
+        given(orderPersistencePort.findByClientOrderCodeIn(Set.of("C-001", "C-002")))
                 .willReturn(new Orders(List.of()));
-        given(orderRepository.saveAll(any(Orders.class)))
+        given(orderPersistencePort.saveAll(any(Orders.class)))
                 .willAnswer(inv -> inv.getArgument(0));
 
         // when
-        orderService.consumeAndSave(List.of(message1, message2));
+        saveOrderService.consumeAndSave(List.of(message1, message2));
 
         // then
-        verify(orderRepository, times(1)).saveAll(any(Orders.class));
+        verify(orderPersistencePort, times(1)).saveAll(any(Orders.class));
     }
 
     @Test
@@ -100,16 +100,16 @@ class OrderServiceTest {
                               .orderDate(LocalDateTime.of(2026, 2, 28, 10, 0))
                               .items(new OrderItems(List.of()))
                               .build();
-        given(orderRepository.findByClientOrderCodeIn(Set.of("C-001", "C-002")))
+        given(orderPersistencePort.findByClientOrderCodeIn(Set.of("C-001", "C-002")))
                 .willReturn(new Orders(List.of(existing)));
-        given(orderRepository.saveAll(any(Orders.class)))
+        given(orderPersistencePort.saveAll(any(Orders.class)))
                 .willAnswer(inv -> inv.getArgument(0));
 
         // when
-        orderService.consumeAndSave(List.of(message1, message2));
+        saveOrderService.consumeAndSave(List.of(message1, message2));
 
         // then
-        verify(orderRepository, times(1)).saveAll(any(Orders.class));
+        verify(orderPersistencePort, times(1)).saveAll(any(Orders.class));
     }
 
     private OrderMessage createMessage(String clientOrderCode) {

@@ -5,7 +5,7 @@ import co.oms.core.domain.model.Orders;
 import java.util.Optional;
 import java.util.Set;
 
-public interface OrderRepository {
+public interface OrderPersistencePort {
 
     Order save(Order order);
 
