@@ -13,15 +13,13 @@
 
 ## 핵심 도메인 개념
 
-### 주문 (Order)
-
-주문의 핵심 흐름:
+### 주문 흐름
 
 ```
 주문 접수 → 출고 요청 → 생산 → 출고 완료 → 배송
 ```
 
-#### 주문 상태 (OutboundStatus)
+### 주문 상태 (OutboundStatus)
 
 ```
 READY → PRODUCING → COMPLETED
@@ -36,53 +34,9 @@ CANCELED
 | COMPLETED | 출고 완료 |
 | CANCELED | 취소됨 |
 
-### 주문 코드 체계
-
-| 코드 | 설명 | 예시 |
-|------|------|------|
-| outboundOrderCode | 출고요청번호 (OMS 채번) | "O-20241216-001" |
-| clientOrderCode | 고객주문번호 (외부 시스템) | "C-12345" |
-| shipOrderKey | 출하문서번호 (WMS) | "SHK-001" |
-| invoiceNumber | 운송장번호 | "123456789012" |
-
 ---
 
-## 주요 Enum (도메인 용어집 참조)
+## 참조
 
-> 상세 정의는 루트 `.claude/ai-context/domain-glossary.md` 참조
-
-### DeliveryPolicy (배송 정책)
-
-| 값 | 설명 |
-|----|------|
-| DAWN | 새벽배송 (샛별) |
-| DAY | 일반배송 (낮배송) |
-| NOW | 즉시배송 |
-
-### Courier (배송사)
-
-| 코드 | 설명 |
-|------|------|
-| 1PL | 자사 물류센터 배송 (새벽배송) |
-| CJDT | CJ대한통운 (일반배송) |
-| LTT | 롯데택배 (일반배송) |
-
----
-
-## 1P vs 3P 물류
-
-| 유형 | 설명 |
-|------|------|
-| 1P (First Party) | 자사 물류센터에서 직접 처리 |
-| 3P (Third Party) | 외부 3PL 센터에서 처리 |
-
----
-
-## 연동 시스템 요약
-
-| 시스템 | 약어 | 역할 |
-|--------|------|------|
-| WMS | Warehouse Management System | 창고 관리 (출고 지시/확인) |
-| CMS | Commerce Management System | 커머스 주문 연동 |
-
+> 도메인 용어(코드 체계, DeliveryPolicy, Courier, 1P/3P 등)는 루트 `.claude/ai-context/domain-glossary.md` 참조
 > 상세 연동 정보는 `external-integration.md` 참조
