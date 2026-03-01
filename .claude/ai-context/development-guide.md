@@ -20,12 +20,32 @@
 | 테스트 DB | Flapdoodle Embedded MongoDB | spring4x:4.24.0 |
 | 테스트 Kafka | spring-kafka-test (@EmbeddedKafka) | |
 
-### 트랜잭션
+### 트랜잭션 (MongoDB)
 
-- `config/MongoConfig` → `MongoTransactionManager` 빈 등록
-- `@ConditionalOnMissingBean(PlatformTransactionManager.class)` 적용
-- Embedded MongoDB는 Replica Set 미지원 → 테스트에서는 `TestMongoConfig`(no-op TxManager) 사용
-- 통합 테스트 클래스에 `@Import(TestMongoConfig.class)` 필수
+```dsl
+RUNTIME:
+  CONFIG: config/MongoConfig → MongoTransactionManager 빈 등록
+  CONDITIONAL: @ConditionalOnMissingBean(PlatformTransactionManager.class) 적용
+  REQUIRES: MongoDB Replica Set (standalone은 트랜잭션 미지원)
+  RULE: Service 계층의 다건 저장/변경에는 @Transactional 적용
+  ANNOTATION_LOCATION: Service의 @Override public 메서드
+
+TEST:
+  RULE: Embedded MongoDB(Flapdoodle)는 Replica Set 미지원 → 트랜잭션 사용 불가
+  SOLUTION: TestMongoConfig에서 no-op PlatformTransactionManager 빈 등록
+  PATTERN: |
+    // src/test/java/.../config/TestMongoConfig.java
+    @TestConfiguration → no-op PlatformTransactionManager 빈 등록
+    // MongoConfig의 @ConditionalOnMissingBean이 TestMongoConfig 빈을 우선 인식
+    // 통합 테스트에 @Import(TestMongoConfig.class) 필수
+```
+
+### Entity 어노테이션
+
+```dsl
+ANNOTATIONS: [@Getter, @Builder, @Document("{collection}"), @NoArgsConstructor(PROTECTED), @AllArgsConstructor]
+NOTE: @Document는 MongoDB Spring Data 어노테이션. 공통 컨벤션의 Entity 패턴에서 persistence 어노테이션 부분을 이 서비스에서는 @Document로 적용
+```
 
 ---
 
