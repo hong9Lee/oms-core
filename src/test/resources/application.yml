@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: oms-core
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/oms-core-test
+  kafka:
+    consumer:
+      group-id: oms-core-order
+      auto-offset-reset: earliest
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JacksonJsonSerializer
+
+kafka:
+  topics:
+    order-1p: order.1p
+    order-3p: order.3p
+
+server:
+  port: 0
+
+de:
+  flapdoodle:
+    mongodb:
+      embedded:
+        version: 7.0.0

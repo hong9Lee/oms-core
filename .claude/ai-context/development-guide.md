@@ -16,8 +16,16 @@
 | 항목 | 기술 | 비고 |
 |------|------|------|
 | 의존성 관리 | Spring Dependency Management | 1.1.7 |
+| 모델 변환 | MapStruct | 1.6.3 + lombok-mapstruct-binding:0.2.0 |
 | 테스트 DB | Flapdoodle Embedded MongoDB | spring4x:4.24.0 |
 | 테스트 Kafka | spring-kafka-test (@EmbeddedKafka) | |
+
+### 트랜잭션
+
+- `config/MongoConfig` → `MongoTransactionManager` 빈 등록
+- `@ConditionalOnMissingBean(PlatformTransactionManager.class)` 적용
+- Embedded MongoDB는 Replica Set 미지원 → 테스트에서는 `TestMongoConfig`(no-op TxManager) 사용
+- 통합 테스트 클래스에 `@Import(TestMongoConfig.class)` 필수
 
 ---
 
