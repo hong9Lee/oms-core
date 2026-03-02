@@ -53,11 +53,14 @@ NOTE: @Document는 MongoDB Spring Data 어노테이션. 공통 컨벤션의 Enti
 FILE: docker-compose.yml
 SERVICES:
   mongodb: mongo:7.0 (Replica Set 모드, 트랜잭션 지원)
-  kafka: apache/kafka:3.9.0 (KRaft 모드)
+  kafka: apache/kafka:3.9.0 (KRaft 모드, 3파티션 기본)
+  redis: redis:7-alpine (Pub/Sub 브로드캐스트)
+  oms-core-1~3: 멀티 인스턴스 (8081~8083, 동일 consumer group)
 COMMANDS:
   START: docker compose up -d
   STOP: docker compose down
   RESET: docker compose down -v
+  REBUILD: docker compose up -d --build
 ```
 
 ### 스케줄링

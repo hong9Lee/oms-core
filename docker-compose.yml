@@ -29,7 +29,88 @@ services:
       KAFKA_CONTROLLER_QUORUM_VOTERS: 1@localhost:9093
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_NUM_PARTITIONS: 3
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+    healthcheck:
+      test: /opt/kafka/bin/kafka-broker-api-versions.sh --bootstrap-server localhost:29092 > /dev/null 2>&1 || exit 1
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+  oms-core-1:
+    build: .
+    container_name: oms-core-1
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_PROFILES_ACTIVE: local
+      SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/oms-core
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+      SPRING_KAFKA_CONSUMER_GROUP_ID: oms-core-order
+      ORDER_TEST_PRODUCER_ENABLED: "true"
+      OMS_INSTANCES: http://oms-core-1:8081,http://oms-core-2:8081,http://oms-core-3:8081
+      SPRING_DATA_REDIS_HOST: redis
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  oms-core-2:
+    build: .
+    container_name: oms-core-2
+    ports:
+      - "8082:8081"
+    environment:
+      SPRING_PROFILES_ACTIVE: local
+      SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/oms-core
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+      SPRING_KAFKA_CONSUMER_GROUP_ID: oms-core-order
+      ORDER_TEST_PRODUCER_ENABLED: "false"
+      OMS_INSTANCES: http://oms-core-1:8081,http://oms-core-2:8081,http://oms-core-3:8081
+      SPRING_DATA_REDIS_HOST: redis
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  oms-core-3:
+    build: .
+    container_name: oms-core-3
+    ports:
+      - "8083:8081"
+    environment:
+      SPRING_PROFILES_ACTIVE: local
+      SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/oms-core
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+      SPRING_KAFKA_CONSUMER_GROUP_ID: oms-core-order
+      ORDER_TEST_PRODUCER_ENABLED: "false"
+      OMS_INSTANCES: http://oms-core-1:8081,http://oms-core-2:8081,http://oms-core-3:8081
+      SPRING_DATA_REDIS_HOST: redis
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  redis:
+    image: redis:7-alpine
+    container_name: oms-core-redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 3
 
 volumes:
   mongodb_data:
